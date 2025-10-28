@@ -94,8 +94,15 @@
 
 .search-box img{
     width: 24px;
+    border-radius: 50%;
     cursor: pointer;
 }
+
+
+.search-box img:hover{
+    background-color: #e2e6eb;
+}
+
 
 .search-box input{
     flex: 1;

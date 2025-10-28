@@ -5,7 +5,7 @@ import { Context } from "../../context/Context";
 
 const Main = () => {
 
-    const {onSent,recentPrompt,showResult,loading,resultData,setInput,input} = useContext(Context);
+    const {onSent,recentPrompt,showResult,loading,resultData,setInput,input,errorFound,setErrorFound} = useContext(Context);
     return(
         <div className="main">
             <div className="nav">
