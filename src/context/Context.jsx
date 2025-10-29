@@ -38,17 +38,28 @@ const ContextProvider = (props) => {
             setRecentPrompt(input);
             response = await runChat(input);
         }
-        let responseArray = response.split("**");
         let newResponse = "";
-        for (let i = 1; i<responseArray.length; i++){
-            if (i===0 || i%2!==1){
-                newResponse += responseArray[i]
-            }
-            else{
-                newResponse += "<b>" + responseArray[i] + "</b>" 
+        if(response.includes("**")){
+            let responseArray = response.split("**");
+            for (let i = 1; i<responseArray.length; i++){
+                if (i===0 || i%2!==1){
+                    newResponse += responseArray[i]
+                }
+                else{
+                    newResponse += "<b>" + responseArray[i] + "</b>" 
+                }
             }
         }
-        let newResponse2 = newResponse.split("*").join("</br>")
+        else{
+            newResponse = response;
+        }
+        let newResponse2;
+        if(response.includes("*")){
+            newResponse2= newResponse.split("*").join("</br>")
+        }
+        else {
+            newResponse2 = response;
+        }
         let newResponseArray = newResponse2.split(" ");
         for (let i = 0; i < newResponseArray.length ; i++){
             const nextWord = newResponseArray[i];
