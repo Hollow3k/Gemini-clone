@@ -19,46 +19,54 @@ const ContextProvider = (props) => {
         },75*index)
     }
 
+    const newChat = () => {
+        setLoading(false);
+        setShowResult(false);
+    }
+
     const onSent = async (prompt) => {
         setResultData("");
         setLoading(true);
         setShowResult(true);
-        setRecentPrompt(input);
-        await runChat(input);
-        const response = await runChat(input);
-        // console.log(response);
-        // let responseArray = response.split("**");
-        // console.log(responseArray);
-        // let newResponse;
-        // for (let i = 1; i<responseArray.length; i++){
-        //     if (i%2===0){
-        //         newResponse += responseArray[i]
-        //     }
-        //     else{
-        //         newResponse += "<b>" + responseArray[i] + "</b>" 
-        //     }
-        // }
-        // console.log(newResponse);
-        // let newResponse2 = newResponse.split("*").join("</br>")
-        // console.log(newResponse2);
-        // let newResponseArray = newResponse2.split(" ");
-        // for (let i = 0; i < newResponseArray.length ; i++){
-        //     const nextWord = newResponseArray[i];
-        //     delayPara(i,nextWord + " ");
-        // }
+        let response;
+        if (prompt !== undefined){
+            response = await runChat(prompt);
+            setRecentPrompt(prompt);
+        }
+        else{
+            setPrevPrompts(prev => [...prev,input])
+            setRecentPrompt(input);
+            response = await runChat(input);
+        }
+        let responseArray = response.split("**");
+        let newResponse = "";
+        for (let i = 1; i<responseArray.length; i++){
+            if (i===0 || i%2!==1){
+                newResponse += responseArray[i]
+            }
+            else{
+                newResponse += "<b>" + responseArray[i] + "</b>" 
+            }
+        }
+        let newResponse2 = newResponse.split("*").join("</br>")
+        let newResponseArray = newResponse2.split(" ");
+        for (let i = 0; i < newResponseArray.length ; i++){
+            const nextWord = newResponseArray[i];
+            delayPara(i,nextWord + " ");
+        }
 
-    // Create a converter instance
-    const converter = new Showdown.Converter();
+    // // Create a converter instance
+    // const converter = new Showdown.Converter();
 
-    // Markdown input
-    const markdownText = response;
+    // // Markdown input
+    // const markdownText = response;
 
-    // Convert to HTML
-    const html = converter.makeHtml(markdownText);
-    setResultData(html);
-    console.log(html);
+    // // Convert to HTML
+    // const html = converter.makeHtml(markdownText);
+    // setResultData(html);
+    // console.log(html);
 
-console.log(html); // Outputs: <h1 id="hello-markdown">Hello, Markdown!</h1>
+    // console.log(html); // Outputs: <h1 id="hello-markdown">Hello, Markdown!</h1>
         setLoading(false);
         setInput(""); 
     }  
@@ -73,7 +81,8 @@ console.log(html); // Outputs: <h1 id="hello-markdown">Hello, Markdown!</h1>
         loading,
         resultData,
         input,
-        setInput
+        setInput,
+        newChat
     }
     return (
         <Context.Provider value = {contextValue}>
